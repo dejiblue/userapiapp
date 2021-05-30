@@ -15,6 +15,9 @@ use App\Http\Controllers\API\V1\UserController;
 |
 */
 
+/**
+ * User APi Routes protected by a middleware
+ */
 Route::group(['middleware' => 'auth.apikey', 'prefix' => 'V1'], function() {
     Route::post('/user/add', [UserController::class, 'createUser']);
     Route::get('/users/{limit?}', [UserController::class, 'getUsers']);
@@ -23,5 +26,8 @@ Route::group(['middleware' => 'auth.apikey', 'prefix' => 'V1'], function() {
     Route::get('/user/avatar/{id}', [UserController::class, 'getUserAvatar']);
 });
 
+/**
+ * Routes returns API version
+ */
 Route::get('/version', [UserController::class, 'index']);
 

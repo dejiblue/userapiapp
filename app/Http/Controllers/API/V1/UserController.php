@@ -29,6 +29,9 @@ class UserController extends Controller
     private $image_avatar = 'https://i.pravatar.cc/300';
 
     /**
+     * Returns the API version
+     * This is excluded from the route Middleware
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function index()
@@ -37,6 +40,8 @@ class UserController extends Controller
     }
 
     /**
+     * Get all users and limit the amount of records returned
+     *
      * @param null $limit
      * @return \Illuminate\Http\JsonResponse
      */
@@ -61,6 +66,8 @@ class UserController extends Controller
     }
 
     /**
+     * Get a single user record
+     *
      * @param $id
      * @return \Illuminate\Http\JsonResponse
      */
@@ -79,6 +86,9 @@ class UserController extends Controller
     }
 
     /**
+     * Generate new user record and avatar from external source
+     * Results are saved to DB
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function createUser()
@@ -134,6 +144,8 @@ class UserController extends Controller
     }
 
     /**
+     * Get a user's avatar url
+     *
      * @param $id
      * @return \Illuminate\Http\JsonResponse
      */
@@ -152,6 +164,9 @@ class UserController extends Controller
     }
 
     /**
+     * Generate some basic user statistics
+     * using simple queries. for complex reports, a more comprehensive and performance centric query will be required
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function getUserStats()
