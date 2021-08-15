@@ -7,7 +7,7 @@ jobs:
     name: Laravel (PHP ${{ matrix.php-versions }})
     runs-on: ubuntu-latest
     services:
-      postgres
+      postgres:
         image: postgres:10.8
         env:
           POSTGRES_USER: postgres
