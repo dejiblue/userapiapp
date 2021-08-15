@@ -49,13 +49,13 @@ class UserController extends Controller
     {
         $users = User::orderBy('created_at', 'DESC');
 
-        if($limit) {
+        if ($limit) {
             $users->take($limit);
         }
 
         $users = $users->get();
 
-        if($users) {
+        if ($users) {
             return response()->json([
                 'success' => true,
                 'message' => 'User list',
@@ -74,7 +74,7 @@ class UserController extends Controller
     public function getUser($id)
     {
         $user = User::findorFail($id);
-        if($user) {
+        if ($user) {
             $user->avatar = request()->getSchemeAndHttpHost().'/images/v1/'.$user->avatar;
             return response()->json([
                 'success' => true,
@@ -95,11 +95,11 @@ class UserController extends Controller
     {
         $userData = $this->curlCall(true);
 
-        if($userData) {
+        if ($userData) {
             $onlineInfo = $userData->person->online_info;
             $personal = $userData->person->personal;
 
-            try{
+            try {
                 $userModel = new User();
                 $userModel->username = $onlineInfo->username;
                 $userModel->name = $personal->name;
@@ -122,12 +122,12 @@ class UserController extends Controller
                 $fileName = $userModel->name.'-'.time().'.png';
                 $uploadDir = public_path('images').'/v1/'.$fileName;
                 $userAvatar = $this->curlCall(false, $this->cartoon_avatar.$personal->name);
-                $fp = fopen($uploadDir,'w');
+                $fp = fopen($uploadDir, 'w');
                 fwrite($fp, $userAvatar);
                 fclose($fp);
 
                 $userModel->avatar = $fileName;
-                if($userModel->save()) {
+                if ($userModel->save()) {
                     $userModel->avatar = request()->getSchemeAndHttpHost().'/images/v1/'.$userModel->avatar;
                     return response()->json([
                         'success' => true,
@@ -135,12 +135,11 @@ class UserController extends Controller
                         'data' => $userModel
                     ], 200);
                 }
-            } catch(\Exception $e) {
+            } catch (\Exception $e) {
                 Log::error(__METHOD__.': '.$e->getMessage());
             }
         }
         return response()->json(['success' => false]);
-
     }
 
     /**
@@ -152,7 +151,7 @@ class UserController extends Controller
     public function getUserAvatar($id)
     {
         $user = User::findorFail($id);
-        if($user) {
+        if ($user) {
             $image_path = request()->getSchemeAndHttpHost().'/images/v1/'.$user->avatar;
             return response()->json([
                 'success' => true,
@@ -172,8 +171,9 @@ class UserController extends Controller
     public function getUserStats()
     {
         $average_age = DB::table('users')
-            ->select(DB::raw('round(AVG(age),0) as average_age'),
-                     DB::raw('count(*) as total_users')
+            ->select(
+                DB::raw('round(AVG(age),0) as average_age'),
+                DB::raw('count(*) as total_users')
             )
             ->get();
 
@@ -213,14 +213,13 @@ class UserController extends Controller
             curl_setopt($inc_curl, CURLOPT_RETURNTRANSFER, true);
             $result = curl_exec($inc_curl);
             curl_close($inc_curl);
-            if($isPerson) {
+            if ($isPerson) {
                 return json_decode($result);
             }
             return $result;
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             Log::error(__METHOD__.': '.$e->getMessage());
         }
         return false;
     }
 }
-
